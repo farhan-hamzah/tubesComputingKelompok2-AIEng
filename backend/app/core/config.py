@@ -9,6 +9,8 @@ class Settings(BaseSettings):
     NLP_MODEL_DIR: str = "models/indobert"
     REGRESSION_MODEL_PATH: str = "models/regression.pkl"
     CLASSIFICATION_MODEL_PATH: str = "models/classification.pkl"
+    KMEANS_MODEL_PATH: str = "models/kmeans_model.pkl"      # tambah ini
+    SCALER_MODEL_PATH: str = "models/scaler.pkl"            # tambah ini
 
     # App
     APP_TITLE: str = "E-Commerce Analytics API"

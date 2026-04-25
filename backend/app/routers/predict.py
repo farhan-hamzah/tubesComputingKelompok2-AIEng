@@ -136,3 +136,24 @@ def submit_transaction(request: TransactionRequest, db: Session = Depends(get_db
         is_anomaly=bool(is_anomaly),
         message="Transaksi terdeteksi anomali" if is_anomaly else "Transaksi normal",
     )
+
+
+@router.post("/cluster")
+def predict_cluster(
+    product_price: float,
+    rating: float,
+    sold_count: float,
+    db: Session = Depends(get_db)
+):
+    """
+    Segmentasi produk ke cluster KMeans.
+    Return: cluster_id + label (Produk Premium / Massal / Gagal).
+    """
+    try:
+        result = ml_service.predict_cluster(product_price, rating, sold_count)
+    except RuntimeError as e:
+        raise HTTPException(status_code=503, detail=str(e))
+    except Exception as e:
+        logger.error(f"Cluster prediction error: {e}")
+        raise HTTPException(status_code=500, detail="Inference error")
+    return result

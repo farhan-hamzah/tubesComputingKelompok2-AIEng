@@ -1,5 +1,6 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from app.services.ml_service import ml_service
 from app.database.connection import get_db
 from app.schemas.ecommerce import (
     SentimentStats, ReviewLogItem, AnomalyItem, ForecastPoint
@@ -31,3 +32,12 @@ def get_anomaly_transactions(limit: int = 50, db: Session = Depends(get_db)):
 def get_forecast_history(limit: int = 30, db: Session = Depends(get_db)):
     """Histori prediksi sold_count untuk Widget 3 (line chart)."""
     return crud_service.get_forecast_history(db, limit=limit)
+
+
+@router.get("/clusters/centers")
+def get_cluster_centers():
+    """Cluster centers untuk scatter plot Widget 4."""
+    try:
+        return ml_service.get_cluster_centers()
+    except RuntimeError as e:
+        raise HTTPException(status_code=503, detail=str(e))
