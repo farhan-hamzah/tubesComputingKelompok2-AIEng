@@ -57,7 +57,7 @@ export default function ReviewForm({ selectedProduct }) {
       <button
         onClick={handleSubmit}
         disabled={loading}
-        className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 disabled:opacity-50"
+        className="w-full flex items-center justify-center gap-3 bg-white border-2 border-primary text-primary py-4 rounded-full font-extrabold hover:bg-black hover:text-white transition-all duration-300"
       >
         {loading ? "Menganalisis..." : "Submit Ulasan"}
       </button>
