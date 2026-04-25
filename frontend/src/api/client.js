@@ -1,42 +1,82 @@
 import axios from "axios";
 
+// ─── 1. ABSTRAKSI: Base API Class ─────────────────────────────
+class BaseApi {
+  constructor(baseURL) {
+    this.client = axios.create({
+      baseURL: baseURL,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  // Method dasar untuk semua request
+  get(endpoint, config = {}) {
+    return this.client.get(endpoint, config);
+  }
+
+  post(endpoint, data, config = {}) {
+    return this.client.post(endpoint, data, config);
+  }
+}
+
+// ─── 2. INHERITANSI & ENKAPSULASI: ML Service ─────────────────
+class MLService extends BaseApi {
+  constructor(baseURL) {
+    super(baseURL); // Memanggil constructor dari BaseApi
+  }
+
+  predictSentiment(reviewText) {
+    return this.post("/predict/sentiment", { review_text: reviewText });
+  }
+
+  predictRegression(data) {
+    return this.post("/predict/regression", data);
+  }
+
+  predictClassification(data) {
+    return this.post("/predict/classification", data);
+  }
+
+  submitTransaction(data) {
+    return this.post("/predict/transaction", data);
+  }
+
+  predictCluster(productPrice, rating, soldCount) {
+    return this.post("/predict/cluster", null, {
+      params: { product_price: productPrice, rating, sold_count: soldCount },
+    });
+  }
+}
+
+// ─── 3. INHERITANSI & ENKAPSULASI: Dashboard Service ──────────
+class DashboardService extends BaseApi {
+  constructor(baseURL) {
+    super(baseURL);
+  }
+
+  getSentimentStats() {
+    return this.get("/dashboard/sentiment/stats");
+  }
+
+  getSentimentLogs(limit = 20) {
+    return this.get("/dashboard/sentiment/logs", { params: { limit } });
+  }
+
+  getAnomalies() {
+    return this.get("/dashboard/anomalies");
+  }
+
+  getForecastHistory() {
+    return this.get("/dashboard/forecast/history");
+  }
+
+  getClusterCenters() {
+    return this.get("/dashboard/clusters/centers");
+  }
+}
+
+// ─── 4. INSTANSIASI OBJEK (Singleton Pattern) ─────────────────
 const BASE_URL = "http://127.0.0.1:8000";
 
-const apiClient = axios.create({
-  baseURL: BASE_URL,
-  headers: { "Content-Type": "application/json" },
-});
-
-// ─── Prediction ───────────────────────────────────────────────
-export const predictSentiment = (reviewText) =>
-  apiClient.post("/predict/sentiment", { review_text: reviewText });
-
-export const predictRegression = (data) =>
-  apiClient.post("/predict/regression", data);
-
-export const predictClassification = (data) =>
-  apiClient.post("/predict/classification", data);
-
-export const submitTransaction = (data) =>
-  apiClient.post("/predict/transaction", data);
-
-export const predictCluster = (productPrice, rating, soldCount) =>
-  apiClient.post("/predict/cluster", null, {
-    params: { product_price: productPrice, rating, sold_count: soldCount },
-  });
-
-// ─── Dashboard ────────────────────────────────────────────────
-export const getSentimentStats = () =>
-  apiClient.get("/dashboard/sentiment/stats");
-
-export const getSentimentLogs = (limit = 20) =>
-  apiClient.get("/dashboard/sentiment/logs", { params: { limit } });
-
-export const getAnomalies = () =>
-  apiClient.get("/dashboard/anomalies");
-
-export const getForecastHistory = () =>
-  apiClient.get("/dashboard/forecast/history");
-
-export const getClusterCenters = () =>
-  apiClient.get("/dashboard/clusters/centers");
+export const mlService = new MLService(BASE_URL);
+export const dashboardService = new DashboardService(BASE_URL);
