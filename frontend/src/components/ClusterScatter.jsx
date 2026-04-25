@@ -9,7 +9,6 @@ import {
   CartesianGrid,
 } from "recharts";
 
-// Palet Monokrom: Hitam, Abu-abu Sedang, Abu-abu Terang
 const COLORS = ["#0B6B3A", "#F9C74F", "#B11226"];
 
 export default function ClusterScatter({ data }) {

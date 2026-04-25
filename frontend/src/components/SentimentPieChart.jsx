@@ -35,7 +35,6 @@ export default function SentimentPieChart({ data }) {
 
   return (
     <div className="flex flex-col items-center w-full">
-      {/* Menggunakan ResponsiveContainer agar menyesuaikan ukuran card */}
       <div className="w-full h-[220px]">
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>

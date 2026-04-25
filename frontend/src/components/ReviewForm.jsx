@@ -1,5 +1,4 @@
 import { useState } from "react";
-// Import instance objek OOP
 import { mlService } from "../api/client";
 
 export default function ReviewForm({ selectedProduct }) {
