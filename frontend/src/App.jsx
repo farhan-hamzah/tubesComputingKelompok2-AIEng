@@ -7,16 +7,16 @@ import {
 } from "react-router-dom";
 import StorePage from "./pages/StorePage";
 import DashboardPage from "./pages/DashboardPage";
+import ProductDetailPage from "./pages/ProductDetailPage";
 
 function Navbar() {
   const location = useLocation();
-
   const linkClass = (path) => `
     flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold transition-all duration-300
     ${
       location.pathname === path
-        ? "bg-primary text-on-primary shadow-md"
-        : "text-secondary hover:bg-surface-container-high hover:text-on-surface"
+        ? "bg-primary text-on-primary shadow-lg"
+        : "text-secondary hover:bg-gray-100"
     }
   `;
 
@@ -25,32 +25,26 @@ function Navbar() {
       <div className="flex items-center gap-8">
         <Link
           to="/"
-          className="text-xl font-extrabold tracking-tighter text-primary"
+          className="text-2xl font-black tracking-tighter text-primary italic"
         >
           SmartStore.
         </Link>
         <div className="flex gap-2">
           <Link to="/" className={linkClass("/")}>
-            <span className="material-symbols-outlined text-[20px]">
-              storefront
-            </span>
             Toko
           </Link>
           <Link to="/dashboard" className={linkClass("/dashboard")}>
-            <span className="material-symbols-outlined text-[20px]">
-              dashboard
-            </span>
             Dashboard Admin
           </Link>
         </div>
       </div>
       <div className="flex items-center gap-4">
-        <button className="material-symbols-outlined text-on-surface p-2 hover:bg-surface-container rounded-full transition-colors">
+        <span className="material-symbols-outlined p-2 cursor-pointer">
           search
-        </button>
-        <button className="material-symbols-outlined text-on-surface p-2 hover:bg-surface-container rounded-full transition-colors">
+        </span>
+        <span className="material-symbols-outlined p-2 cursor-pointer">
           shopping_bag
-        </button>
+        </span>
       </div>
     </nav>
   );
@@ -63,6 +57,7 @@ export default function App() {
         <Navbar />
         <Routes>
           <Route path="/" element={<StorePage />} />
+          <Route path="/product/:id" element={<ProductDetailPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
         </Routes>
       </div>
