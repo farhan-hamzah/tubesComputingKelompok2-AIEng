@@ -27,7 +27,7 @@ class CRUDService:
             .group_by(models.ReviewLog.sentiment_label)
             .all()
         )
-        stats = {"positif": 0, "netral": 0, "negatif": 0}
+        stats = {"Transactional": 0, "Transitional": 0, "Communal": 0}
         for label, count in rows:
             if label in stats:
                 stats[label] = count

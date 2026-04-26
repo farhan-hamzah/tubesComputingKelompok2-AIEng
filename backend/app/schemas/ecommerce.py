@@ -17,16 +17,24 @@ class SentimentRequest(BaseModel):
 
 
 class RegressionRequest(BaseModel):
-    product_price: float = Field(..., gt=0, description="Harga harus lebih dari 0")
-    product_category: str = Field(..., min_length=1)
-    avg_rating: float = Field(..., ge=1.0, le=5.0, description="Rating antara 1.0 - 5.0")
+    Category: str = Field(..., min_length=1)
+    Price: float = Field(..., gt=0)
+    Overall_Rating: float = Field(..., ge=1.0, le=5.0, alias="Overall Rating")
+
+    class Config:
+        populate_by_name = True
 
 
 class ClassificationRequest(BaseModel):
-    product_price: float = Field(..., gt=0)
-    product_category: str = Field(..., min_length=1)
-    avg_rating: float = Field(..., ge=1.0, le=5.0)
-    sold_count: int = Field(..., ge=0)
+    Category: str = Field(..., min_length=1)
+    Location: str = Field(..., min_length=1)
+    Price: float = Field(..., gt=0)
+
+
+class ClusterRequest(BaseModel):
+    Price: float = Field(..., gt=0)
+    Overall_Rating: float = Field(..., ge=1.0, le=5.0)
+    Number_Sold: float = Field(..., ge=0)
 
 
 class TransactionRequest(BaseModel):
@@ -45,16 +53,21 @@ class SentimentResponse(BaseModel):
 
 
 class RegressionResponse(BaseModel):
-    product_price: float
-    product_category: str
-    avg_rating: float
-    predicted_sold_count: float
+    Category: str
+    Price: float
+    Overall_Rating: float
+    predicted_number_sold: float
 
 
 class ClassificationResponse(BaseModel):
     is_top_product: bool
     confidence_score: float
-    label: str  # "Top Product" atau "Standard Product"
+    label: str
+
+
+class ClusterResponse(BaseModel):
+    cluster_id: int
+    cluster_label: str
 
 
 class TransactionResponse(BaseModel):
@@ -66,9 +79,9 @@ class TransactionResponse(BaseModel):
 # ─── Dashboard Schemas ────────────────────────────────────────────────────────
 
 class SentimentStats(BaseModel):
-    positif: int
-    netral: int
-    negatif: int
+    Transactional: int
+    Transitional: int
+    Communal: int
     total: int
 
 

@@ -8,18 +8,11 @@ export default function ReviewForm({ selectedProduct }) {
   const [error, setError] = useState("");
 
   const handleSubmit = async () => {
-    if (!text.trim()) {
-      setError("Review tidak boleh kosong");
-      return;
-    }
-    if (text.length > 1000) {
-      setError("Maksimal 1000 karakter");
-      return;
-    }
+    if (!text.trim()) { setError("Review tidak boleh kosong"); return; }
+    if (text.length > 1000) { setError("Maksimal 1000 karakter"); return; }
     setError("");
     setLoading(true);
     try {
-      // Memanggil method dari objek OOP
       const res = await mlService.predictSentiment(text);
       setResult(res.data);
     } catch (err) {
@@ -35,10 +28,16 @@ export default function ReviewForm({ selectedProduct }) {
     negatif: "text-red-500",
   };
 
+  const sentimentEmoji = {
+    positif: "😊",
+    netral: "😐",
+    negatif: "😞",
+  };
+
   return (
-    <div className="bg-white rounded-xl shadow p-4 max-w-xl">
+    <div>
       {selectedProduct && (
-        <p className="text-sm text-gray-500 mb-2">
+        <p className="text-sm text-gray-500 mb-3">
           Ulasan untuk:{" "}
           <span className="font-semibold">{selectedProduct.name}</span>
         </p>
@@ -57,7 +56,7 @@ export default function ReviewForm({ selectedProduct }) {
       <button
         onClick={handleSubmit}
         disabled={loading}
-        className="w-full flex items-center justify-center gap-3 bg-white border-2 border-primary text-primary py-4 rounded-full font-extrabold hover:bg-black hover:text-white transition-all duration-300"
+        className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 font-bold"
       >
         {loading ? "Menganalisis..." : "Submit Ulasan"}
       </button>
@@ -65,15 +64,8 @@ export default function ReviewForm({ selectedProduct }) {
       {result && (
         <div className="mt-4 p-3 bg-gray-50 rounded-lg">
           <p className="text-sm text-gray-600">Hasil Analisis Sentimen:</p>
-          <p
-            className={`text-xl font-bold capitalize ${sentimentColor[result.sentiment_label]}`}
-          >
-            {result.sentiment_label === "positif"
-              ? "😊"
-              : result.sentiment_label === "negatif"
-                ? "😞"
-                : "😐"}{" "}
-            {result.sentiment_label}
+          <p className={`text-xl font-bold capitalize ${sentimentColor[result.sentiment_label]}`}>
+            {sentimentEmoji[result.sentiment_label]} {result.sentiment_label}
           </p>
           <p className="text-xs text-gray-400">
             Confidence: {(result.confidence_score * 100).toFixed(1)}%
