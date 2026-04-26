@@ -76,7 +76,7 @@ class DashboardService extends BaseApi {
 }
 
 // ─── 4. INSTANSIASI OBJEK (Singleton Pattern) ─────────────────
-const BASE_URL = "http://127.0.0.1:8000";
+const BASE_URL = "https://farhannzz-ecommerce-analytics.hf.space";
 
 export const mlService = new MLService(BASE_URL);
 export const dashboardService = new DashboardService(BASE_URL);
